@@ -205,3 +205,13 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+
+.venv/
+experiment_folder/faiss_index/
+experiment_folder/test/
+experiment_folder/extracted_text.md
+
+backend/faiss_index/
+backend/uploaded_data/
+backend/sections/
