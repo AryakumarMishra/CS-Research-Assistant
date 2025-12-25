@@ -23,11 +23,13 @@ app.add_middleware(
 )
 
 
-
+# Test Endpoint
 @app.get("/")
 def home_page():
     return "Welcome to your AI Research Assistant"
 
+
+# Main Endpoints
 @app.post("/upload_pdf")
 async def upload_file(file: UploadFile):
     pdf_id = uuid.uuid4().hex
@@ -44,10 +46,6 @@ async def upload_file(file: UploadFile):
         'embeddings':'backend/faiss_index',
         'pdf_id': pdf_id
     }
-
-@app.post("/ask_query")
-async def ask_query(request: QueryInput):
-    return retrieve_doc(request.query, request.pdf_id)
 
 
 @app.post("/analyze_sections")
@@ -75,7 +73,7 @@ def analyze_sections(pdf_id: str):
 @app.post("/chat")
 async def chat(request: ChatInput):
     retriever = get_retriever(request.pdf_id)
-    docs = retriever.invoke(request.question)
+    docs = retriever.invoke(request.question)[:3]
 
     context = "\n\n".join(doc.page_content for doc in docs)
 
