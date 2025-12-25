@@ -215,3 +215,5 @@ experiment_folder/extracted_text.md
 backend/faiss_index/
 backend/uploaded_data/
 backend/sections/
+
+rag_evaluation/
