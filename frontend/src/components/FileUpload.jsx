@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { Upload, FileText, CheckCircle, Loader2 } from 'lucide-react';
-import { uploadPdf } from '../services/api';
+import { uploadPdf, analyzeSections } from '../services/api';
 import { toast } from 'react-hot-toast';
 
 const FileUpload = ({ onUploadSuccess }) => {
@@ -13,16 +13,20 @@ const FileUpload = ({ onUploadSuccess }) => {
             toast.error('Please upload a PDF file.');
             return;
         }
-
         setIsUploading(true);
         try {
-            const data = await uploadPdf(file);
-            // Assuming data contains { pdf_id: "...", message: "..." }
-            toast.success(data.message || 'PDF uploaded successfully!');
-            onUploadSuccess(data.pdf_id, file.name);
+            const uploadData = await uploadPdf(file);
+            const pdfId = uploadData.pdf_id;
+            toast.success('PDF uploaded successfully. Analyzing paper...');
+
+            await analyzeSections(pdfId);
+            toast.success('Paper analysis completed!');
+            
+            onUploadSuccess(pdfId, file.name);
+
         } catch (error) {
             console.error(error);
-            toast.error('Failed to upload PDF. Please try again.');
+            toast.error('Failed to process PDF. Please try again.');
         } finally {
             setIsUploading(false);
         }

@@ -14,7 +14,7 @@ def get_retriever(pdf_id):
 
     return vectorstore.as_retriever(
         search_type='similarity',
-        search_kwargs={"k":5}
+        search_kwargs={"k":3}
     )
 
 

@@ -20,6 +20,15 @@ export const uploadPdf = async (file) => {
     return response.data;
 };
 
+
+export const analyzeSections = async (pdf_id) => {
+    const response = await api.post('/analyze_sections', null, {
+        params: { pdf_id }
+    });
+    return response.data;
+};
+
+
 export const sendQuery = async (queryInput) => {
     // Expects { query: str, pdf_id: str }
     const response = await api.post('/chat', queryInput);
