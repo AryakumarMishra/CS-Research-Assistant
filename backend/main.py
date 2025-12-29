@@ -49,7 +49,7 @@ async def upload_file(file: UploadFile):
 
 
 @app.post("/analyze_sections")
-def analyze_sections(pdf_id: str):
+async def analyze_sections(pdf_id: str):
     cached = load_cached_sections(pdf_id)
     if cached:
         return cached
@@ -79,9 +79,27 @@ async def chat(request: ChatInput):
 
     prompt = f"""
         You are an AI research assistant.
-        Answer concisely in 3–5 sentences.
-        Do not add background information unless necessary.
-        If the answer is not in the context, say so.
+
+        STRICT RULES (must be followed):
+        1. Use ONLY the information contained in the provided context from the uploaded PDF.
+        2. Do NOT use prior knowledge, assumptions, or external information.
+        3. If the answer cannot be found explicitly in the context, reply exactly:
+        "Not found in the provided document."
+        4. ALWAYS include the EXACT context excerpt(s) from the PDF that were used to answer the question.
+        5. The context must be copied verbatim with no paraphrasing, edits, or omissions.
+        6. If no answer is found, do NOT invent or infer information.
+
+        Answer guidelines:
+        - 3–5 concise sentences maximum.
+        - No background or explanatory information unless it appears in the context.
+
+        Required output format:
+
+        Answer:
+        <your answer here>
+
+        Context (verbatim from the document):
+        <context excerpt here>
 
         Context:
         {context}
@@ -89,6 +107,7 @@ async def chat(request: ChatInput):
         Question:
         {request.question}
         """
+
 
     llm = get_llm()
     answer = llm.invoke(prompt)

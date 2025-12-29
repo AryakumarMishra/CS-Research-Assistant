@@ -11,7 +11,7 @@ SECTIONS_DIR = "backend/sections"
 
 SECTION_CONFIG = {
     "problem_statement": {
-        "query": "research problem addressed by the paper",
+        "query": "This paper addresses the problem of",
         "prompt": """
 You are an AI research assistant.
 
@@ -26,7 +26,7 @@ Extract the main research problem addressed by the paper.
 """
     },
     "motivation": {
-        "query": "motivation behind the research, why this problem matters",
+        "query": "The motivation for this research is",
         "prompt": """
 You are an AI research assistant.
 
@@ -38,7 +38,7 @@ Explain the motivation of the paper.
 """
     },
     "methodology": {
-        "query": "proposed method, system architecture, pipeline",
+        "query": "The proposed method consists of",
         "prompt": """
 You are an AI research assistant.
 
@@ -78,7 +78,7 @@ def generate_section(section_name: str, retriever, llm):
 
     docs = retriever.invoke(config["query"])
 
-    MAX_CONTEXT_CHARS = 8000
+    MAX_CONTEXT_CHARS = 3000
     context = "\n\n".join(doc.page_content for doc in docs)
     context = context[:MAX_CONTEXT_CHARS]
 

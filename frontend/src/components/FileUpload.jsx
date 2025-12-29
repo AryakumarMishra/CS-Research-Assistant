@@ -9,6 +9,8 @@ const FileUpload = ({ onUploadSuccess }) => {
     const [isUploading, setIsUploading] = useState(false);
 
     const handleFile = async (file) => {
+        if (isUploading) return; 
+        
         if (!file || file.type !== 'application/pdf') {
             toast.error('Please upload a PDF file.');
             return;
